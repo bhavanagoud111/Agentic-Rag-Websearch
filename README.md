@@ -2,8 +2,6 @@
 
 An advanced Retrieval-Augmented Generation (RAG) system that enhances local document querying with real-time web search capabilities. This application leverages a multi-agent team built with CrewAI to provide comprehensive answers by searching both a user-uploaded PDF and the web.
 
-> Built by [Bhavana Goud](https://github.com/bhavanagoud111)
-
 ## Features
 
 - **PDF Knowledge Base**: Upload a PDF to create a dynamic, searchable knowledge base.
