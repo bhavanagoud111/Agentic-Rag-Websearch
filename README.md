@@ -118,8 +118,4 @@ The core logic is defined in `crews.py` and `qdrant_tool.py`.
 - **[AgentOps](https://agentops.ai/)**: For monitoring and tracing the agent execution flow.
 - **[PDFPlumber](https://github.com/jsvine/pdfplumber)**: For robust text extraction from PDF files.
 
-## License
 
-This project is licensed under the MIT License.
-
-Copyright (c) 2026 Bhavana Goud
