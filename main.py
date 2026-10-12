@@ -1,5 +1,3 @@
-# Author: Bhavana Goud | github.com/bhavanagoud111
-from operator import ne
 import os
 import shutil
 from qdrant_tool import load_pdf_to_qdrant

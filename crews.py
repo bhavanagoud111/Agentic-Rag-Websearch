@@ -1,5 +1,3 @@
-# Author: Bhavana Goud | github.com/bhavanagoud111
-from calendar import c
 import os
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import EXASearchTool
