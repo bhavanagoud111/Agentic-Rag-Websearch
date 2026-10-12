@@ -1,8 +1,5 @@
 import os
 import shutil
-from qdrant_tool import load_pdf_to_qdrant
-from crews import crew
-# from .crew import crew
 import streamlit as st
 import base64
 from dotenv import load_dotenv
@@ -10,6 +7,35 @@ import tempfile
 load_dotenv()
 
 st.set_page_config(page_title="Agentic RAG", layout="wide")
+
+# The OpenAI client, Qdrant tool and Exa tool are created when `crews` and
+# `qdrant_tool` are imported, so check the required keys before importing them.
+REQUIRED_ENV_VARS = ["OPENAI_API_KEY", "QDRANT_URL", "QDRANT_API_KEY", "EXA_API_KEY"]
+missing_env_vars = [name for name in REQUIRED_ENV_VARS if not os.getenv(name)]
+if missing_env_vars:
+    st.error(
+        "Missing required environment variables: "
+        + ", ".join(missing_env_vars)
+        + ". Copy `.env.example` to `.env`, fill in your keys and restart the app."
+    )
+    st.stop()
+
+from qdrant_tool import load_pdf_to_qdrant  # noqa: E402
+from crews import crew  # noqa: E402
+
+
+def load_image_base64(path):
+    """Return the base64-encoded contents of an image, or None if it is missing."""
+    if not os.path.exists(path):
+        return None
+    with open(path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode()
+
+
+def show_sidebar_image(path, width):
+    """Show an image in the sidebar only if the file exists."""
+    if os.path.exists(path):
+        st.image(path, width=width)
 
 # Ensure session state variables are initialized
 if "current_pdf" not in st.session_state:
@@ -43,18 +69,12 @@ def display_pdf_preview(pdf_file):
 
 col1, col2 = st.columns([4, 1])
 with col1:
-    # Convert images to base64
-    with open("./assets/qdrant-logo.svg", "rb") as qdrant_file:
-        qdrant_base64 = base64.b64encode(qdrant_file.read()).decode()
-
-    with open("./assets/exa-logo.png", "rb") as exa_file:
-        exa_base64 = base64.b64encode(exa_file.read()).decode()
-
-    with open("./assets/crewai-logo.png", "rb") as crew_file:
-        crew_base64 = base64.b64encode(crew_file.read()).decode()
-
-    with open("./assets/Nebius.png", "rb") as nebius_file:
-        nebius_base64 = base64.b64encode(nebius_file.read()).decode()
+    # Logo images are optional: if ./assets is missing, fall back to plain text.
+    crew_base64 = load_image_base64("./assets/crewai-logo.png")
+    if crew_base64:
+        powered_by = f'<img src="data:image/png;base64,{crew_base64}" style="height: 44px; margin: 1; top: -20px;">'
+    else:
+        powered_by = "CrewAI"
 
     # Create title with embedded images
     title_html = f"""
@@ -64,7 +84,7 @@ with col1:
              Agentic RAG with Web Search
             </h1>
             <h2 style="margin: 0; font-size: 1.2em; color: #555;">
-             powered by <img src="data:image/png;base64,{crew_base64}" style="height: 44px; margin: 1; top: -20px;">
+             powered by {powered_by}
             </h2>
             </div>
         </div>
@@ -83,7 +103,7 @@ with col2:
 
 with st.sidebar:
 
-    st.image("./assets/qdrant-logo.svg", width=180)
+    show_sidebar_image("./assets/qdrant-logo.svg", width=180)
 
     qdrant_api_key = st.text_input(
         "Qdrant API Key",
@@ -101,7 +121,7 @@ with st.sidebar:
 
     st.divider()
 
-    st.image("./assets/exa-logo.png", width=100)
+    show_sidebar_image("./assets/exa-logo.png", width=100)
 
     exa_api_key = st.text_input(
         "Exa API Key",
