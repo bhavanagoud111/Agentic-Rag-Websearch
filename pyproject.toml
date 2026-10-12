@@ -5,7 +5,7 @@ description = "Agentic RAG system combining PDF document search with real-time w
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
 authors = [
-    { name = "Bhavana Goud", url = "https://github.com/bhavanagoud111" }
+    { name = "Bhavana Goud" }
 ]
 dependencies = [
     "agentops>=0.4.18",
