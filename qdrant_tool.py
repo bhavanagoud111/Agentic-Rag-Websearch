@@ -1,5 +1,3 @@
-# Author: Bhavana Goud | github.com/bhavanagoud111
-from operator import le
 import os
 import uuid
 import pdfplumber

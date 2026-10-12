@@ -3,13 +3,13 @@ name = "agentic-rag-websearch"
 version = "0.1.0"
 description = "Agentic RAG system combining PDF document search with real-time web search using CrewAI, Qdrant, and Exa."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.14"
 authors = [
-    { name = "Bhavana Goud", url = "https://github.com/bhavanagoud111" }
+    { name = "Bhavana Goud" }
 ]
 dependencies = [
     "agentops>=0.4.18",
-    "crewai[tools]>=0.150.0",
+    "crewai[tools]>=0.150.0,<0.160.0",
     "exa-py>=1.14.18",
     "openai>=1.97.1",
     "pdfplumber>=0.11.7",

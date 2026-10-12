@@ -1,19 +1,18 @@
-# Author: Bhavana Goud | github.com/bhavanagoud111
-from calendar import c
 import os
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import EXASearchTool
 import agentops
 from qdrant_tool import get_qdrant_tool
-import agentops
 from dotenv import load_dotenv
 load_dotenv()
 
+# AgentOps tracing is optional: only initialise it when a key is configured.
 AGENTOPS_API_KEY = os.getenv("AGENTOPS_API_KEY")
-agentops.init(
-    api_key=AGENTOPS_API_KEY,
-    default_tags=['crewai']
-)
+if AGENTOPS_API_KEY:
+    agentops.init(
+        api_key=AGENTOPS_API_KEY,
+        default_tags=['crewai']
+    )
 
 search_tool = EXASearchTool()
 qdrant_tool = get_qdrant_tool()
