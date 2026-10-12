@@ -9,7 +9,7 @@ An advanced Retrieval-Augmented Generation (RAG) system that enhances local docu
 - **Multi-Agent System**: Utilizes a CrewAI team of specialized agents for database search, web search, and answer generation.
 - **Vector Storage**: Powered by Qdrant for efficient vector storage and similarity search.
 - **Conversational Interface**: An intuitive chat interface built with Streamlit.
-- **AI Observability**: Integrated with AgentOps for tracing and monitoring agent performance.
+- **AI Observability**: Optional AgentOps integration for tracing and monitoring agent performance.
 
 ## Architecture
 
@@ -61,30 +61,32 @@ The system uses a sequential CrewAI process:
     ```
 
 2. **Install dependencies**:
-    This project uses `uv` for package management.
+    This project uses `uv` for package management. No lockfile is committed, so `uv sync` resolves the dependencies from `pyproject.toml` and creates a local `uv.lock`.
     ```bash
     pip install uv
     uv sync
     ```
 
 3. **Set up environment variables**:
-    Create a `.env` file in the project directory and add your API keys:
+    Copy `.env.example` to `.env` and fill in your API keys:
     ```env
     OPENAI_API_KEY="your_openai_api_key"
     QDRANT_API_KEY="your_qdrant_api_key"
     QDRANT_URL="your_qdrant_cluster_url"
     EXA_API_KEY="your_exa_api_key"
-    AGENTOPS_API_KEY="your_agentops_api_key"
+    AGENTOPS_API_KEY="your_agentops_api_key"   # optional
+    QDRANT_COLLECTION_NAME="rag_with_web_search"   # optional, this is the default
     ```
+    `OPENAI_API_KEY`, `QDRANT_URL`, `QDRANT_API_KEY` and `EXA_API_KEY` are required; the app shows an error and stops if any of them is missing. AgentOps tracing is only enabled when `AGENTOPS_API_KEY` is set. `QDRANT_COLLECTION_NAME` sets the Qdrant collection the PDF is loaded into.
 
 4. **Run the application**:
     ```bash
-    streamlit run main.py
+    uv run streamlit run main.py
     ```
 
 ## Usage Guide
 
-1. **Enter API Keys**: Fill in your Qdrant and Exa API keys in the sidebar.
+1. **Check API Keys**: The keys are read from your `.env` file when the app starts; the sidebar shows the configured Qdrant and Exa values.
 2. **Upload a PDF**: Use the file uploader in the sidebar to select a PDF. The application will automatically process it and load it into your Qdrant collection.
 3. **Ask a Question**: Once the PDF is loaded, use the chat input to ask a question.
 4. **Get an Answer**: The agent crew will start its process. The final, synthesized answer, combining knowledge from the PDF and the web, will be displayed in the chat.
